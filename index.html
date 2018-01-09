@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <base target="_top">
+      <style>
+         textarea {width: 800px; height:400px}
+      </style>
+   </head>
+   <body>
+      <h1><?=title?></h1>
+      <table>
+         <tr>
+            <td>Referencing Script ID</td>
+            <td>
+               <?=scriptId?>
+               <a href="<?=editUrl?>" target="_blank">edit</a>
+               <a href="<?=devUrl?>" target="_blank">dev</a>
+               <a href="<?=execUrl?>" target="_blank">exec</a>
+            </td>
+         </tr>
+         <tr>
+            <td>Referenced Library ID</td>
+            <td><?!=ReferencedLibrary.getIdAndUrls()?></td>
+         </tr>
+         <?!=ReferencedLibrary.getAuthorityTypeTr(PropertiesService.getScriptProperties().getProperty("authorityType"))?>
+         <tr>
+            <td>Restriction</td>
+            <td> <?=ScriptApp.getService().Restriction?></td>
+         </tr>
+         <tr>
+            <td>Authorization Info for CUSTOM_FUNCTION</td>
+            <td><?=ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.CUSTOM_FUNCTION).getAuthorizationStatus()?></td>
+         </tr>
+         <tr>
+            <td>Authorization Info for FULL</td>
+            <td><?=ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL).getAuthorizationStatus()?></td>
+         </tr>
+         <tr>
+            <td>Authorization Info for LIMITED</td>
+            <td><?=ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.LIMITED).getAuthorizationStatus()?></td>
+         </tr>
+         <tr>
+            <td>Authorization Info for NONE</td>
+            <td><?=ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.NONE).getAuthorizationStatus()?></td>
+         </tr>
+         <tr>
+            <td>now</td>
+            <td><?=new Date()?></td>
+         </tr>
+         <tr>
+            <td>scriptId</td>
+            <td><?=ScriptApp.getScriptId()?></td>
+         </tr>
+         <tr>
+            <td>activeUser</td>
+            <td><?=Session.getActiveUser().getEmail()?></td>
+         </tr>
+         <tr>
+            <td>temporaryActiveUserKey</td>
+            <td><?=Session.getTemporaryActiveUserKey()?></td>
+         </tr>
+         <tr>
+            <td>effectiveUser</td>
+            <td><?=Session.getEffectiveUser().getEmail()?></td>
+         </tr>
+      </table>
+      <textarea readonly></textarea>
+      <button onclick="updateData(this)">updateData</button>
+      <button onclick="getData(this)">getData</button>
+      <script>
+         function updateData(){
+           google.script.run.withSuccessHandler(function(){
+           }).updateData();
+         }
+         
+         function getData(){
+           google.script.run.withSuccessHandler(function(j){
+             var textarea = document.getElementsByTagName("textarea")[0];
+             textarea.value = JSON.stringify(j,undefined,4);
+           }).getData();
+         }
+      </script>
+   </body>
+</html>
